@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kappaml"
+version = "1.0.0"
+authors = [
+    { name="Alex Imbrea", email="alex@kappaml.com" }
+]
+description = "A Python client to interact with the KappaML platform"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "requests>=2.31.0"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/kappaml/kappaml-python"
+"Bug Tracker" = "https://github.com/kappaml/kappaml-python/issues" 
