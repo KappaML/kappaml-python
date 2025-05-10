@@ -1,3 +1,7 @@
+[![PyPI version](https://img.shields.io/pypi/v/kappaml)](https://pypi.org/project/kappaml)
+[![PyPI downloads](https://img.shields.io/pypi/dm/kappaml)](https://pypi.org/project/kappaml/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # KappaML Python Client
 
 Python client to interact with the [KappaML](https://kappaml.com) platform 🐍
