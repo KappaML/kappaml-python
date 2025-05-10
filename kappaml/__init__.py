@@ -17,4 +17,3 @@ __all__ = [
 ]
 
 __author__ = "Alex Imbrea" 
-__version__ = "1.0.1"
