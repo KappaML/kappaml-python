@@ -20,7 +20,7 @@ classifiers = [
     "Development Status :: 5 - Production/Stable"
 ]
 dependencies = [
-    "requests>=2.31.0"
+    "requests>=2.32.0"
 ]
 
 [project.urls]
