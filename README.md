@@ -22,141 +22,110 @@ pip install kappaml
 ## Quick Start
 
 ```python
+import asyncio
 from kappaml import KappaML
 
-# Initialize the client
-client = KappaML(api_key="your_api_key")  # Or set KAPPAML_API_KEY env variable
+async def main():
+    # Initialize client with your API key
+    async with KappaML(api_key="your_api_key") as client:
+        # Create and deploy a model
+        model_id = await client.create_model("my-model", "regression")
+        
+        # Make predictions
+        predictions = await client.predict(
+            model_id, 
+            {"feature1": 1, "feature2": 2}
+        )
+        
+        # Get model metrics
+        metrics = await client.get_metrics(model_id)
+        
+        print(f"Predictions: {predictions}")
+        print(f"Model metrics: {metrics}")
 
-# Create a new model
-model_id = client.create_model(
-    name="my-regression-model",
-    ml_type="regression"
-)
+# Run the async function
+asyncio.run(main())
+```
 
-# Train the model with a single data point
-client.learn(
-    model_id=model_id,
-    features={"x1": 1.0, "x2": 2.0},
-    target=3.0
-)
+## Authentication
 
-# Make predictions
-prediction = client.predict(
-    model_id=model_id,
-    features={"x1": 1.5, "x2": 2.5}
-)
+The SDK requires an API key for authentication. You can provide it in two ways:
 
-# Get model metrics
-metrics = client.get_metrics(model_id)
+1. Directly in the constructor:
+```python
+client = KappaML(api_key="your_api_key")
+```
 
-# Clean up
-client.delete_model(model_id)
+2. Through environment variable:
+```bash
+export KAPPAML_API_KEY="your_api_key"
+```
+```python
+client = KappaML()  # Will use KAPPAML_API_KEY env variable
 ```
 
 ## API Reference
 
 ### KappaML Class
 
-#### Constructor
+#### `async with KappaML(api_key: Optional[str] = None) as client:`
+Initialize a new KappaML client. Using it as an async context manager ensures proper cleanup of resources.
 
-```python
-client = KappaML(api_key: Optional[str] = None)
-```
-
-- `api_key`: Your KappaML API key. If not provided, will look for `KAPPAML_API_KEY` environment variable.
-
-#### Methods
-
-##### create_model
-
-```python
-def create_model(
-    name: str,
-    ml_type: str,
-    wait_for_deployment: bool = True,
-    timeout: int = 60
-) -> str
-```
-
-Creates a new model on KappaML.
-
+#### `async create_model(name: str, ml_type: str, wait_for_deployment: bool = True, timeout: int = 60) -> str`
+Create a new model on the KappaML platform.
 - `name`: Name of the model
 - `ml_type`: Type of ML task ('regression' or 'classification')
 - `wait_for_deployment`: Whether to wait for model deployment to complete
 - `timeout`: Maximum time to wait for deployment in seconds
-- Returns: The model ID
+Returns the model ID.
 
-##### learn
+#### `async predict(model_id: str, features: Dict[str, Any]) -> Dict[str, Any]`
+Make predictions using a deployed model.
+- `model_id`: The model ID
+- `features`: Dictionary of feature names and values
+Returns the model's predictions.
 
-```python
-def learn(
-    model_id: str,
-    features: Dict[str, Any],
-    target: Union[float, int, str]
-) -> Dict[str, Any]
-```
-
-Train the model with a single data point.
-
+#### `async learn(model_id: str, features: Dict[str, Any], target: Union[float, int, str]) -> Dict[str, Any]`
+Train the model with a new data point.
 - `model_id`: The model ID
 - `features`: Dictionary of feature names and values
 - `target`: The target value to learn from
-- Returns: Response from the learning API
+Returns the learning response.
 
-##### predict
-
-```python
-def predict(
-    model_id: str,
-    features: Dict[str, Any]
-) -> Dict[str, Any]
-```
-
-Make predictions using a model.
-
-- `model_id`: The model ID
-- `features`: Dictionary of feature names and values
-- Returns: Model predictions
-
-##### get_metrics
-
-```python
-def get_metrics(model_id: str) -> Dict[str, Any]
-```
-
+#### `async get_metrics(model_id: str) -> Dict[str, Any]`
 Get current metrics for a model.
-
 - `model_id`: The model ID
-- Returns: Model metrics
+Returns the model metrics.
 
-##### delete_model
-
-```python
-def delete_model(model_id: str) -> None
-```
-
+#### `async delete_model(model_id: str) -> None`
 Delete a model.
-
 - `model_id`: The model ID to delete
 
 ## Error Handling
 
-The SDK defines several exception classes for handling errors:
+The SDK provides specific exceptions for different error cases:
 
-- `KappaMLError`: Base exception for all SDK errors
+- `KappaMLError`: Base exception for SDK errors
 - `ModelNotFoundError`: Raised when a model is not found
-- `ModelDeploymentError`: Raised when model deployment fails or times out
+- `ModelDeploymentError`: Raised when model deployment fails
 
-Example error handling:
-
+Example:
 ```python
 from kappaml import KappaML, ModelNotFoundError
 
-client = KappaML()
-
-try:
-    metrics = client.get_metrics("non-existent-model")
-except ModelNotFoundError:
-    print("Model not found!")
+async def main():
+    async with KappaML() as client:
+        try:
+            metrics = await client.get_metrics("non_existent_model")
+        except ModelNotFoundError:
+            print("Model not found!")
 ```
+
+## Requirements
+
+- Python 3.10+
+
+## License
+
+MIT License
 

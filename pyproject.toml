@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kappaml"
-version = "1.0.3"
+version = "1.1.0"
 authors = [
     { name="Alex Imbrea", email="alex@kappaml.com" }
 ]
@@ -20,7 +20,7 @@ classifiers = [
     "Development Status :: 5 - Production/Stable"
 ]
 dependencies = [
-    "requests>=2.32.0"
+    "httpx>=0.28.0"
 ]
 
 [project.urls]
