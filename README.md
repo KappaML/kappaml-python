@@ -120,12 +120,3 @@ async def main():
         except ModelNotFoundError:
             print("Model not found!")
 ```
-
-## Requirements
-
-- Python 3.10+
-
-## License
-
-MIT License
-
